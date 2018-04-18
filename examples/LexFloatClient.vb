@@ -17,57 +17,26 @@ Namespace Cryptlex
         Private Const DLL_FILE_NAME_X64 As String = "LexFloatClient64.dll"
 #End If
 
-        Private vGUID As String = Nothing
+        Private productId As String = Nothing
         Private handle As UInteger = 0
 
         '
-        '            FUNCTION: SetProductFile()
+        '            FUNCTION: SetProductId()
         '
-        '            PURPOSE: Sets the path of the Product.dat file. This should be
-        '            used if your application and Product.dat file are in different
-        '            folders or you have renamed the Product.dat file.
-        '
-        '            If this function is used, it must be called on every start of
-        '            your program before any other functions are called.
+        '            PURPOSE: Sets the product id of your application.
         '
         '            PARAMETERS:
-        '            * filePath - path of the product file (Product.dat)
-        '
-        '            RETURN CODES: LF_OK, LF_E_FPATH, LF_E_PFILE
-        '
-        '            NOTE: If this function fails to set the path of product file, none of the
-        '            other functions will work.
-        '        
-
-
-        Public Shared Function SetProductFile(filePath As String) As Integer
-#If LF_ANY_CPU Then
-            Return If(IntPtr.Size = 8, Native.SetProductFile_x64(filePath), Native.SetProductFile(filePath))
-#Else
-            Return Native.SetProductFile(filePath)
-#End If
-
-        End Function
-
-        '
-        '            FUNCTION: SetVersionGUID()
-        '
-        '            PURPOSE: Sets the version GUID of your application.
-        '
-        '            PARAMETERS:
-        '            * versionGUID - the unique version GUID of your application as mentioned
+        '            * productId - the unique product id of your application as mentioned
         '              on the product version page of your application in the dashboard.
         '
-        '            RETURN CODES: LF_OK, LF_E_PFILE, LF_E_GUID
+        '            RETURN CODES: LF_OK, LF_E_PFILE, LF_E_PRODUCT_ID
         '        
-
-
-        Public Function SetVersionGUID(versionGUID As String) As Integer
-            Me.vGUID = versionGUID
+        Public Function SetProductId(productId As String) As Integer
+            Me.productId = productId
 #If LF_ANY_CPU Then
-            Return If(IntPtr.Size = 8, Native.GetHandle_x64(versionGUID, handle), Native.GetHandle(versionGUID, handle))
+            Return If(IntPtr.Size = 8, Native.GetHandle_x64(productId, handle), Native.GetHandle(productId, handle))
 #Else
-            Return Native.GetHandle(versionGUID, handle)
+            Return Native.GetHandle(productId, handle)
 #End If
         End Function
 
@@ -77,11 +46,11 @@ Namespace Cryptlex
         '            PURPOSE: Sets the network address of the LexFloatServer.
         '
         '            PARAMETERS:
-        '            * handle - handle for the version GUID
+        '            * handle - handle for the product id
         '            * hostAddress - hostname or the IP address of the LexFloatServer
         '            * port - port of the LexFloatServer
         '
-        '            RETURN CODES: LF_OK, LF_E_HANDLE, LF_E_GUID, LF_E_SERVER_ADDRESS
+        '            RETURN CODES: LF_OK, LF_E_HANDLE, LF_E_PRODUCT_ID, LF_E_SERVER_ADDRESS
         '        
 
 
@@ -105,10 +74,10 @@ Namespace Cryptlex
         '            LF_E_LICENSE_EXPIRED_INET, LF_E_SERVER_TIME, LF_E_TIME.
         '
         '            PARAMETERS:
-        '            * handle - handle for the version GUID
+        '            * handle - handle for the product id
         '            * callback - name of the callback function
         '
-        '            RETURN CODES: LF_OK, LF_E_HANDLE, LF_E_GUID
+        '            RETURN CODES: LF_OK, LF_E_HANDLE, LF_E_PRODUCT_ID
         '        
 
 
@@ -132,9 +101,9 @@ Namespace Cryptlex
         '            PURPOSE: Sends the request to lease the license from the LexFloatServer.
         '
         '            PARAMETERS:
-        '            * handle - handle for the version GUID
+        '            * handle - handle for the product id
         '
-        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_GUID, LF_E_SERVER_ADDRESS,
+        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_PRODUCT_ID, LF_E_SERVER_ADDRESS,
         '            LF_E_CALLBACK, LF_E_LICENSE_EXISTS, LF_E_INET, LF_E_NO_FREE_LICENSE, LF_E_TIME,
         '            LF_E_PRODUCT_VERSION, LF_E_SERVER_TIME
         '        
@@ -157,9 +126,9 @@ Namespace Cryptlex
         '            Call this function before you exit your application to prevent zombie licenses.
         '
         '            PARAMETERS:
-        '            * handle - handle for the version GUID
+        '            * handle - handle for the product id
         '
-        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_GUID, LF_E_SERVER_ADDRESS,
+        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_PRODUCT_ID, LF_E_SERVER_ADDRESS,
         '            LF_E_CALLBACK, LF_E_INET, LF_E_TIME, LF_E_SERVER_TIME
         '        
 
@@ -180,9 +149,9 @@ Namespace Cryptlex
         '            it retuns LF_OK.
         '
         '            PARAMETERS:
-        '            * handle - handle for the version GUID
+        '            * handle - handle for the product id
         '
-        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_GUID, LF_E_SERVER_ADDRESS,
+        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_PRODUCT_ID, LF_E_SERVER_ADDRESS,
         '            LF_E_CALLBACK
         '        
 
@@ -197,27 +166,27 @@ Namespace Cryptlex
         End Function
 
         '
-        '            FUNCTION: GetCustomLicenseField()
+        '            FUNCTION: GetLicenseMetadata()
         '
-        '            PURPOSE: Get the value of the custom field associated with the float server key.
+        '            PURPOSE: Get the value of the license metadata field associated with the float server key.
         '
         '            PARAMETERS:
-        '            * handle - handle for the version GUID
-        '            * fieldId - id of the custom field whose value you want to get
-        '            * fieldValue - pointer to a buffer that receives the value of the string
-        '            * length - size of the buffer pointed to by the fieldValue parameter
+        '            * handle - handle for the product id
+        '            * key - key of the metadata field whose value you want to get
+        '            * value - pointer to a buffer that receives the value of the string
+        '            * length - size of the buffer pointed to by the value parameter
         '
-        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_GUID, LF_E_SERVER_ADDRESS,
-        '            LF_E_CALLBACK, LF_E_BUFFER_SIZE, LF_E_CUSTOM_FIELD_ID, LF_E_INET, LF_E_TIME,
+        '            RETURN CODES: LF_OK, LF_FAIL, LF_E_HANDLE, LF_E_PRODUCT_ID, LF_E_SERVER_ADDRESS,
+        '            LF_E_CALLBACK, LF_E_BUFFER_SIZE, LF_E_METADATA_KEY_NOT_FOUND, LF_E_INET, LF_E_TIME,
         '            LF_E_SERVER_TIME
         '        
 
 
-        Public Function GetCustomLicenseField(fieldId As String, fieldValue As StringBuilder, length As Integer) As Integer
+        Public Function GetLicenseMetadata(key As String, value As StringBuilder, length As Integer) As Integer
 #If LF_ANY_CPU Then
-            Return If(IntPtr.Size = 8, Native.GetCustomLicenseField_x64(handle, fieldId, fieldValue, length), Native.GetCustomLicenseField(handle, fieldId, fieldValue, length))
+            Return If(IntPtr.Size = 8, Native.GetLicenseMetadata_x64(handle, key, value, length), Native.GetLicenseMetadata(handle, key, value, length))
 #Else
-            Return Native.GetCustomLicenseField(handle, fieldId, fieldValue, length)
+            Return Native.GetLicenseMetadata(handle, key, value, length)
 #End If
 
         End Function
@@ -244,162 +213,120 @@ Namespace Cryptlex
 
         End Function
 
-        '** Return Codes **
+        Public Enum StatusCodes As UInteger
+            
+            '
+            '    CODE: LA_OK
 
+            '    MESSAGE: Success code.
+            '
+            LA_OK = 0
 
-        Public Const LF_OK As Integer = &H0
+            '
+            '    CODE: LA_FAIL
 
-        Public Const LF_FAIL As Integer = &H1
+            '    MESSAGE: Failure code.
+            '
+            LA_FAIL = 1
 
-        '
-        '            CODE: LF_E_INET
-        '
-        '            MESSAGE: Failed to connect to the server due to network error.
-        '        
+            '
+            '    CODE: LF_E_PRODUCT_ID
 
+            '    MESSAGE: The product id is incorrect.
+            LF_E_PRODUCT_ID = 40
 
-        Public Const LF_E_INET As Integer = &H2
+            '
+            '    CODE: LF_E_CALLBACK
 
-        '
-        '            CODE: LF_E_CALLBACK
-        '
-        '            MESSAGE: Invalid or missing callback function.
-        '        
+            '    MESSAGE: Invalid or missing callback function.
+            '
+            LF_E_CALLBACK = 41
 
+            '
+            '    CODE: LF_E_HANDLE
 
-        Public Const LF_E_CALLBACK As Integer = &H3
+            '    MESSAGE: Invalid handle.
+            LF_E_HANDLE = 42
 
-        '
-        '            CODE: LF_E_NO_FREE_LICENSE
-        '
-        '            MESSAGE: No free license is available
-        '        
+            '
+            '    CODE: LF_E_SERVER_ADDRESS
 
+            '    MESSAGE: Missing or invalid server address.
+            LF_E_SERVER_ADDRESS = 43
 
-        Public Const LF_E_NO_FREE_LICENSE As Integer = &H4
+            '
+            '    CODE: LF_E_SERVER_TIME
 
-        '
-        '            CODE: LF_E_LICENSE_EXISTS
-        '
-        '            MESSAGE: License has already been leased.
-        '        
+            '    MESSAGE: System time on Server Machine has been tampered with. Ensure
+            '    your date and time settings are correct on the server machine.
+            LF_E_SERVER_TIME = 44,
 
+            '
+            '    CODE: LF_E_TIME
 
-        Public Const LF_E_LICENSE_EXISTS As Integer = &H5
+            '    MESSAGE: The system time has been tampered with. Ensure your date
+            '    and time settings are correct.
+            LF_E_TIME = 45,
 
-        '
-        '            CODE: LF_E_HANDLE
-        '
-        '            MESSAGE: Invalid handle.
-        '        
+            '
+            '    CODE: LF_E_INET
 
+            '    MESSAGE: Failed to connect to the server due to network error.
+            LF_E_INET = 46,
 
-        Public Const LF_E_HANDLE As Integer = &H6
+            '
+            '    CODE: LF_E_NO_FREE_LICENSE
 
-        '
-        '            CODE: LF_E_LICENSE_EXPIRED
-        '
-        '            MESSAGE: License lease has expired. This happens when the
-        '            request to refresh the license fails due to license been taken
-        '            up by some other client.
-        '        
+            '    MESSAGE: No free license is available
+            LF_E_NO_FREE_LICENSE = 47,
 
+            '
+            '    CODE: LF_E_LICENSE_EXISTS
 
-        Public Const LF_E_LICENSE_EXPIRED As Integer = &H7
+            '    MESSAGE: License has already been leased.
+            LF_E_LICENSE_EXISTS = 48,
 
-        '
-        '            CODE: LF_E_LICENSE_EXPIRED_INET
-        '
-        '            MESSAGE: License lease has expired due to network error. This 
-        '            happens when the request to refresh the license fails due to
-        '            network error.
-        '        
+            '
+            '    CODE: LF_E_LICENSE_EXPIRED
 
+            '    MESSAGE: License lease has expired. This happens when the
+            '    request to refresh the license fails due to license been taken
+            '    up by some other client.
+            LF_E_LICENSE_EXPIRED = 49,
 
-        Public Const LF_E_LICENSE_EXPIRED_INET As Integer = &H8
+            '
+            '    CODE: LF_E_LICENSE_EXPIRED_INET
 
-        '
-        '            CODE: LF_E_SERVER_ADDRESS
-        '
-        '            MESSAGE: Missing server address.
-        '        
+            '    MESSAGE: License lease has expired due to network error. This
+            '    happens when the request to refresh the license fails due to
+            '    network error.
+            LF_E_LICENSE_EXPIRED_INET = 50,
 
+            '
+            '    CODE: LF_E_BUFFER_SIZE
 
-        Public Const LF_E_SERVER_ADDRESS As Integer = &H9
+            '    MESSAGE: The buffer size was smaller than required.
+            LF_E_BUFFER_SIZE = 51,
 
-        '
-        '            CODE: LF_E_PFILE
-        '
-        '            MESSAGE: Invalid or corrupted product file.
-        '        
+            '
+            '    CODE: LF_E_METADATA_KEY_NOT_FOUND
 
+            '    MESSAGE: The metadata key does not exist.
+            LF_E_METADATA_KEY_NOT_FOUND = 52,
 
-        Public Const LF_E_PFILE As Integer = &HA
+            '
+            '    CODE: LF_E_SERVER
 
-        '
-        '            CODE: LF_E_FPATH
-        '
-        '            MESSAGE: Invalid product file path.
-        '        
+            '    MESSAGE: Server error.
+            LF_E_SERVER = 70,
 
+            '
+            '    CODE: LF_E_CLIENT
 
-        Public Const LF_E_FPATH As Integer = &HB
-
-        '
-        '            CODE: LF_E_PRODUCT_VERSION
-        '
-        '            MESSAGE: The version GUID of the client and server don't match.
-        '        
-
-
-        Public Const LF_E_PRODUCT_VERSION As Integer = &HC
-
-        '
-        '            CODE: LF_E_GUID
-        '
-        '            MESSAGE: The version GUID doesn't match that of the product file.
-        '        
-
-
-        Public Const LF_E_GUID As Integer = &HD
-
-        '
-        '            CODE: LF_E_SERVER_TIME
-        '
-        '            MESSAGE: System time on Server Machine has been tampered with. Ensure 
-        '            your date and time settings are correct on the server machine.
-        '        
-
-
-        Public Const LF_E_SERVER_TIME As Integer = &HE
-
-        '
-        '            CODE: LF_E_TIME
-        '
-        '            MESSAGE: The system time has been tampered with. Ensure your date
-        '            and time settings are correct.
-        '        
-
-
-        Public Const LF_E_TIME As Integer = &H10
-
-        '
-        '            CODE: LF_E_CUSTOM_FIELD_ID
-        '
-        '            MESSAGE: Invalid custom field id.
-        '        
-
-
-        Public Const LF_E_CUSTOM_FIELD_ID As Integer = &H11
-
-        '
-        '            CODE: LF_E_BUFFER_SIZE
-        '
-        '            MESSAGE: The buffer size was smaller than required.
-        '        
-
-
-        Public Const LF_E_BUFFER_SIZE As Integer = &H12
+            '    MESSAGE: Client error.
+            LF_E_CLIENT = 71
+            
+        End Enum
 
         <UnmanagedFunctionPointer(CallingConvention.Cdecl)>
         Public Delegate Sub CallbackType(status As UInteger)
@@ -412,12 +339,9 @@ Namespace Cryptlex
         Private NotInheritable Class Native
             Private Sub New()
             End Sub
+            
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
-            Public Shared Function SetProductFile(filePath As String) As Integer
-            End Function
-
-            <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
-            Public Shared Function GetHandle(versionGUID As String, ByRef handle As UInteger) As Integer
+            Public Shared Function GetHandle(productId As String, ByRef handle As UInteger) As Integer
             End Function
 
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
@@ -441,7 +365,7 @@ Namespace Cryptlex
             End Function
 
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
-            Public Shared Function GetCustomLicenseField(handle As UInteger, fieldId As String, fieldValue As StringBuilder, length As Integer) As Integer
+            Public Shared Function GetLicenseMetadata(handle As UInteger, key As String, value As StringBuilder, length As Integer) As Integer
             End Function
 
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
@@ -449,12 +373,9 @@ Namespace Cryptlex
             End Function
 
 #If LF_ANY_CPU Then
-            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="SetProductFile", CallingConvention:=CallingConvention.Cdecl)>
-            Public Shared Function SetProductFile_x64(filePath As String) As Integer
-            End Function
 
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetHandle", CallingConvention:=CallingConvention.Cdecl)>
-            Public Shared Function GetHandle_x64(versionGUID As String, ByRef handle As UInteger) As Integer
+            Public Shared Function GetHandle_x64(productId As String, ByRef handle As UInteger) As Integer
             End Function
 
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="SetFloatServer", CallingConvention:=CallingConvention.Cdecl)>
@@ -477,8 +398,8 @@ Namespace Cryptlex
             Public Shared Function HasLicense_x64(handle As UInteger) As Integer
             End Function
 
-            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetCustomLicenseField", CallingConvention:=CallingConvention.Cdecl)>
-            Public Shared Function GetCustomLicenseField_x64(handle As UInteger, fieldId As String, fieldValue As StringBuilder, length As Integer) As Integer
+            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetLicenseMetadata", CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function GetLicenseMetadata_x64(handle As UInteger, key As String, value As StringBuilder, length As Integer) As Integer
             End Function
 
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GlobalCleanUp", CallingConvention:=CallingConvention.Cdecl)>
