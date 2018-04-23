@@ -27,14 +27,14 @@ Public Class Form1
     End Sub
 
     Private Sub leaseBtn_Click(sender As Object, e As EventArgs) Handles leaseBtn.Click
-        If floatClient IsNot Nothing AndAlso floatClient.HasLicense() = LexFloatClient.LF_OK Then
+        If floatClient IsNot Nothing AndAlso floatClient.HasLicense() = LexFloatClient.StatusCodes.LF_OK Then
             Return
         End If
         Dim status As Integer
         floatClient = New LexFloatClient()
-        status = floatClient.SetVersionGUID("59A44CE9-5415-8CF3-BD54-EA73A64E9A1B")
+        status = floatClient.SetProductId("PASTE_YOUR_PRODUCT_ID")
         If status <> LexFloatClient.StatusCodes.LF_OK Then
-            Me.statusLabel.Text = "Error setting version GUID: " + status.ToString()
+            Me.statusLabel.Text = "Error setting product id: " + status.ToString()
             Return
         End If
         status = floatClient.SetFloatServer("localhost", 8090)

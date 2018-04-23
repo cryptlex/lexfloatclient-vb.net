@@ -214,20 +214,20 @@ Namespace Cryptlex
         End Function
 
         Public Enum StatusCodes As UInteger
-            
+
             '
-            '    CODE: LA_OK
+            '    CODE: LF_OK
 
             '    MESSAGE: Success code.
             '
-            LA_OK = 0
+            LF_OK = 0
 
             '
-            '    CODE: LA_FAIL
+            '    CODE: LF_FAIL
 
             '    MESSAGE: Failure code.
             '
-            LA_FAIL = 1
+            LF_FAIL = 1
 
             '
             '    CODE: LF_E_PRODUCT_ID
@@ -259,32 +259,32 @@ Namespace Cryptlex
 
             '    MESSAGE: System time on Server Machine has been tampered with. Ensure
             '    your date and time settings are correct on the server machine.
-            LF_E_SERVER_TIME = 44,
+            LF_E_SERVER_TIME = 44
 
             '
             '    CODE: LF_E_TIME
 
             '    MESSAGE: The system time has been tampered with. Ensure your date
             '    and time settings are correct.
-            LF_E_TIME = 45,
+            LF_E_TIME = 45
 
             '
             '    CODE: LF_E_INET
 
             '    MESSAGE: Failed to connect to the server due to network error.
-            LF_E_INET = 46,
+            LF_E_INET = 46
 
             '
             '    CODE: LF_E_NO_FREE_LICENSE
 
             '    MESSAGE: No free license is available
-            LF_E_NO_FREE_LICENSE = 47,
+            LF_E_NO_FREE_LICENSE = 47
 
             '
             '    CODE: LF_E_LICENSE_EXISTS
 
             '    MESSAGE: License has already been leased.
-            LF_E_LICENSE_EXISTS = 48,
+            LF_E_LICENSE_EXISTS = 48
 
             '
             '    CODE: LF_E_LICENSE_EXPIRED
@@ -292,7 +292,7 @@ Namespace Cryptlex
             '    MESSAGE: License lease has expired. This happens when the
             '    request to refresh the license fails due to license been taken
             '    up by some other client.
-            LF_E_LICENSE_EXPIRED = 49,
+            LF_E_LICENSE_EXPIRED = 49
 
             '
             '    CODE: LF_E_LICENSE_EXPIRED_INET
@@ -300,25 +300,25 @@ Namespace Cryptlex
             '    MESSAGE: License lease has expired due to network error. This
             '    happens when the request to refresh the license fails due to
             '    network error.
-            LF_E_LICENSE_EXPIRED_INET = 50,
+            LF_E_LICENSE_EXPIRED_INET = 50
 
             '
             '    CODE: LF_E_BUFFER_SIZE
 
             '    MESSAGE: The buffer size was smaller than required.
-            LF_E_BUFFER_SIZE = 51,
+            LF_E_BUFFER_SIZE = 51
 
             '
             '    CODE: LF_E_METADATA_KEY_NOT_FOUND
 
             '    MESSAGE: The metadata key does not exist.
-            LF_E_METADATA_KEY_NOT_FOUND = 52,
+            LF_E_METADATA_KEY_NOT_FOUND = 52
 
             '
             '    CODE: LF_E_SERVER
 
             '    MESSAGE: Server error.
-            LF_E_SERVER = 70,
+            LF_E_SERVER = 70
 
             '
             '    CODE: LF_E_CLIENT
