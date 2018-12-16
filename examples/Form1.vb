@@ -24,7 +24,7 @@ Public Class Form1
     End Sub
 
     Private Sub leaseBtn_Click(sender As Object, e As EventArgs) Handles leaseBtn.Click
-        If LexFloatClient.HasLicense() = LexFloatClient.StatusCodes.LF_OK Then
+        If LexFloatClient.HasFloatingLicense() = LexFloatClient.StatusCodes.LF_OK Then
             Return
         End If
 
@@ -43,7 +43,7 @@ Public Class Form1
             Return
         End If
 
-        status = LexFloatClient.SetFloatingLicenseCallback(LicenceRenewCallback)
+        status = LexFloatClient.SetFloatingLicenseCallback(AddressOf LicenceRenewCallback)
 
         If status <> LexFloatClient.StatusCodes.LF_OK Then
             Me.statusLabel.Text = "Error setting callback function: " & status.ToString()
@@ -61,12 +61,12 @@ Public Class Form1
     End Sub
 
     Private Sub dropBtn_Click(sender As Object, e As EventArgs) Handles dropBtn.Click
-        If LexFloatClient.HasLicense() <> LexFloatClient.StatusCodes.LF_OK Then
+        If LexFloatClient.HasFloatingLicense() <> LexFloatClient.StatusCodes.LF_OK Then
             Return
         End If
 
         Dim status As Integer
-        status = LexFloatClient.DropLicense()
+        status = LexFloatClient.DropFloatingLicense()
 
         If status <> LexFloatClient.StatusCodes.LF_OK Then
             Me.statusLabel.Text = "Error dropping license: " & status.ToString()

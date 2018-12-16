@@ -3,7 +3,7 @@ Imports System.Runtime.InteropServices
 Imports System.Text
 
 Namespace Cryptlex
-    Public NotInheritable Class LexActivator
+    Public NotInheritable Class LexFloatClient
 
         Private Sub New()
         End Sub
@@ -15,7 +15,7 @@ Namespace Cryptlex
         '     and uncomment "LF_ANY_CPU" conditional compiler constant.
         '
         '
-#Const LF_ANY_CPU = 1
+        '#Const LF_ANY_CPU = 1
 
 #If LF_ANY_CPU Then
         Private Const DLL_FILE_NAME_X64 As String = "LexFloatClient64.dll"
@@ -38,11 +38,10 @@ Namespace Cryptlex
         '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID
         '
         Public Shared Function SetHostProductId(productId As String) As Integer
-            Me.productId = productId
 #If LF_ANY_CPU Then
-            Return If(IntPtr.Size = 8, Native.SetHostProductId_x64(productId, handle), Native.SetHostProductId(productId, handle))
+            Return If(IntPtr.Size = 8, Native.SetHostProductId_x64(productId), Native.SetHostProductId(productId))
 #Else
-            Return Native.SetHostProductId(productId, handle)
+            Return Native.SetHostProductId(productId)
 #End If
         End Function
 
@@ -154,9 +153,9 @@ Namespace Cryptlex
         ' 
         Public Shared Function GetHostLicenseExpiryDate(ByRef expiryDate As UInteger) As Integer
 #If LF_ANY_CPU Then
-            Return If(IntPtr.Size = 8, Native.GetHostLicenseExpiryDate_x64(handle, key, value, length), Native.GetHostLicenseExpiryDate(handle, key, value, length))
+            Return If(IntPtr.Size = 8, Native.GetHostLicenseExpiryDate_x64(expiryDate), Native.GetHostLicenseExpiryDate(expiryDate))
 #Else
-            Return Native.GetHostLicenseExpiryDate(handle, key, value, length)
+            Return Native.GetHostLicenseExpiryDate(expiryDate)
 #End If
         End Function
 
@@ -209,13 +208,13 @@ Namespace Cryptlex
         '   
         Public Shared Function HasFloatingLicense() As Integer
 #If LF_ANY_CPU Then
-            Return If(IntPtr.Size = 8, Native.HasFloatingLicense_x64(), Native.HasFloatingLicense())
+            'Return If(IntPtr.Size = 8, Native.HasFloatingLicense_x64(), Native.HasFloatingLicense())
 #Else
             Return Native.HasFloatingLicense()
 #End If
         End Function
 
-        
+
         Public Enum StatusCodes As UInteger
 
             '
@@ -396,7 +395,7 @@ Namespace Cryptlex
             '    MESSAGE: The grace period for server license is over.
             '
             LF_E_SERVER_LICENSE_GRACE_PERIOD_OVER = 76
-            
+
         End Enum
 
         <UnmanagedFunctionPointer(CallingConvention.Cdecl)>
@@ -408,7 +407,7 @@ Namespace Cryptlex
         Private NotInheritable Class Native
             Private Sub New()
             End Sub
-            
+
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function SetHostProductId(ByVal productId As String) As Integer
             End Function
@@ -453,31 +452,31 @@ Namespace Cryptlex
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="SetHostUrl", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function SetHostUrl_x64(ByVal hostUrl As String) As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="SetFloatingLicenseCallback", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function SetFloatingLicenseCallback_x64(ByVal callback As CallbackType) As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="SetFloatingClientMetadata", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function SetFloatingClientMetadata_x64(ByVal key As String, ByVal value As String) As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetHostLicenseMetadata", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function GetHostLicenseMetadata_x64(ByVal key As String, ByVal value As StringBuilder, ByVal length As Integer) As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetHostLicenseExpiryDate", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function GetHostLicenseExpiryDate_x64(ByRef expiryDate As UInteger) As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="RequestFloatingLicense", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function RequestFloatingLicense_x64() As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="DropFloatingLicense", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function DropFloatingLicense_x64() As Integer
             End Function
-            
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="HasFloatingLicense", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function HasFloatingLicense_x64() As Integer
             End Function
