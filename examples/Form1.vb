@@ -1,70 +1,78 @@
 ﻿Imports FloatSample.Cryptlex
 
 Public Class Form1
-    Dim floatClient As LexFloatClient
+
     Public Sub New()
         InitializeComponent()
     End Sub
 
-    Private Sub LicenceRefreshCallback(status As UInteger)
+    Private Sub LicenceRenewCallback(ByVal status As UInteger)
         Select Case status
-            Case LexFloatClient.StatusCodes.LF_E_LICENSE_EXPIRED
-                Me.statusLabel.Text = "The lease expired before it could be renewed."
+            Case LexFloatClient.StatusCodes.LF_OK
+                Me.statusLabel.Text = "The license lease has renewed successfully."
+                Exit Select
+            Case LexFloatClient.StatusCodes.LF_E_LICENSE_NOT_FOUND
+                Me.statusLabel.Text = "The license expired before it could be renewed."
                 Exit Select
             Case LexFloatClient.StatusCodes.LF_E_LICENSE_EXPIRED_INET
-                Me.statusLabel.Text = "The lease expired due to network connection failure."
-                Exit Select
-            Case LexFloatClient.StatusCodes.LF_E_SERVER_TIME
-                Me.statusLabel.Text = "The lease expired because Server System time was modified."
-                Exit Select
-            Case LexFloatClient.StatusCodes.LF_E_TIME
-                Me.statusLabel.Text = "The lease expired because Client System time was modified."
+                Me.statusLabel.Text = "The license expired due to network connection failure."
                 Exit Select
             Case Else
-                Me.statusLabel.Text = "The lease expired due to some other reason."
+                Me.statusLabel.Text = "The license renew failed due to other reason. Error code: " & status.ToString()
                 Exit Select
         End Select
     End Sub
 
     Private Sub leaseBtn_Click(sender As Object, e As EventArgs) Handles leaseBtn.Click
-        If floatClient IsNot Nothing AndAlso floatClient.HasLicense() = LexFloatClient.StatusCodes.LF_OK Then
+        If LexFloatClient.HasLicense() = LexFloatClient.StatusCodes.LF_OK Then
             Return
         End If
+
         Dim status As Integer
-        floatClient = New LexFloatClient()
-        status = floatClient.SetProductId("PASTE_YOUR_PRODUCT_ID")
+        status = LexFloatClient.SetHostProductId("PASTE_YOUR_PRODUCT_ID")
+
         If status <> LexFloatClient.StatusCodes.LF_OK Then
-            Me.statusLabel.Text = "Error setting product id: " + status.ToString()
+            Me.statusLabel.Text = "Error setting product id: " & status.ToString()
             Return
         End If
-        status = floatClient.SetFloatServer("localhost", 8090)
+
+        status = LexFloatClient.SetHostUrl("http://localhost:8090")
+
         If status <> LexFloatClient.StatusCodes.LF_OK Then
-            Me.statusLabel.Text = "Error Setting Host Address: " + status.ToString()
+            Me.statusLabel.Text = "Error setting host url: " & status.ToString()
             Return
         End If
-        status = floatClient.SetLicenseCallback(AddressOf LicenceRefreshCallback)
+
+        status = LexFloatClient.SetFloatingLicenseCallback(LicenceRenewCallback)
+
         If status <> LexFloatClient.StatusCodes.LF_OK Then
-            Me.statusLabel.Text = "Error Setting Callback Function: " + status.ToString()
+            Me.statusLabel.Text = "Error setting callback function: " & status.ToString()
             Return
         End If
-        status = floatClient.RequestLicense()
+
+        status = LexFloatClient.RequestFloatingLicense()
+
         If status <> LexFloatClient.StatusCodes.LF_OK Then
-            Me.statusLabel.Text = "Error Requesting License: " + status.ToString()
+            Me.statusLabel.Text = "Error requesting license: " & status.ToString()
             Return
         End If
+
         Me.statusLabel.Text = "License leased successfully!"
     End Sub
 
     Private Sub dropBtn_Click(sender As Object, e As EventArgs) Handles dropBtn.Click
-        If floatClient Is Nothing Then
+        If LexFloatClient.HasLicense() <> LexFloatClient.StatusCodes.LF_OK Then
             Return
         End If
+
         Dim status As Integer
-        status = floatClient.DropLicense()
+        status = LexFloatClient.DropLicense()
+
         If status <> LexFloatClient.StatusCodes.LF_OK Then
-            Me.statusLabel.Text = "Error Dropping License: " + status.ToString()
+            Me.statusLabel.Text = "Error dropping license: " & status.ToString()
             Return
         End If
+
         Me.statusLabel.Text = "License dropped successfully!"
     End Sub
 End Class
