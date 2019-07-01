@@ -144,6 +144,26 @@ Namespace Cryptlex
         End Function
 
         '
+        '     FUNCTION: GetHostLicenseMeterAttribute()
+
+        '     PURPOSE: Gets the license meter attribute allowed uses and total uses associated with the LexFloatServer license.
+
+        '     PARAMETERS:
+        '     * name - name of the meter attribute
+        '     * allowedUses - pointer to the integer that receives the value
+        '     * totalUses - pointer to the integer that receives the value
+
+        '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_METER_ATTRIBUTE_NOT_FOUND
+        '
+        Public Shared Function GetHostLicenseMeterAttribute(ByVal name As String, ByRef allowedUses As UInteger, ByRef totalUses As UInteger) As Integer
+#If LA_ANY_CPU Then
+            Return If(IntPtr.Size = 8, Native.GetHostLicenseMeterAttribute_x64(name, allowedUses, totalUses), Native.GetHostLicenseMeterAttribute(name, allowedUses, totalUses))
+#Else
+            Return Native.GetHostLicenseMeterAttribute(name, allowedUses, totalUses)
+#End If
+        End Function
+
+        '
         '     FUNCTION: GetHostLicenseExpiryDate()
 
         '     PURPOSE: Gets the license expiry date timestamp of the LexFloatServer license.
@@ -161,6 +181,24 @@ Namespace Cryptlex
 #End If
         End Function
 
+        '
+        '     FUNCTION: GetFloatingClientMeterAttributeUses()
+
+        '     PURPOSE: Gets the meter attribute uses consumed by the floating client.
+
+        '     PARAMETERS:
+        '     * name - name of the meter attribute
+        '     * uses - pointer to the integer that receives the value
+
+        '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_METER_ATTRIBUTE_NOT_FOUND
+        '
+        Public Shared Function GetFloatingClientMeterAttributeUses(ByVal name As String, ByRef uses As UInteger) As Integer
+#If LA_ANY_CPU Then
+            Return If(IntPtr.Size = 8, Native.GetFloatingClientMeterAttributeUses_x64(name, uses), Native.GetFloatingClientMeterAttributeUses(name, uses))
+#Else
+            Return Native.GetFloatingClientMeterAttributeUses(name, uses)
+#End If
+        End Function
 
         '
         '     FUNCTION: RequestFloatingLicense()
@@ -216,6 +254,73 @@ Namespace Cryptlex
 #End If
         End Function
 
+        '
+        '     FUNCTION: IncrementFloatingClientMeterAttributeUses()
+
+        '     PURPOSE: Increments the meter attribute uses of the floating client.
+
+        '     PARAMETERS:
+        '     * name - name of the meter attribute
+        '     * increment - the increment value
+
+        '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_HOST_URL, LF_E_METER_ATTRIBUTE_NOT_FOUND,
+        '     LF_E_INET, LF_E_LICENSE_NOT_FOUND, LF_E_CLIENT, LF_E_IP, LF_E_SERVER, LF_E_METER_ATTRIBUTE_USES_LIMIT_REACHED,
+        '     LF_E_SERVER_LICENSE_NOT_ACTIVATED, LF_E_SERVER_TIME_MODIFIED, LF_E_SERVER_LICENSE_SUSPENDED,
+        '     LF_E_SERVER_LICENSE_GRACE_PERIOD_OVER, LF_E_SERVER_LICENSE_EXPIRED
+
+        '
+        Public Shared Function IncrementFloatingClientMeterAttributeUses(ByVal name As String, increment As UInteger) As Integer
+#If LA_ANY_CPU Then
+            Return If(IntPtr.Size = 8, Native.IncrementFloatingClientMeterAttributeUses_x64(name, increment), Native.IncrementFloatingClientMeterAttributeUses(name, increment))
+#Else
+            Return Native.IncrementFloatingClientMeterAttributeUses(name, increment)
+#End If
+        End Function
+
+        '
+        '     FUNCTION: DecrementFloatingClientMeterAttributeUses()
+
+        '     PURPOSE: Decrements the meter attribute uses of the floating client.
+
+        '     PARAMETERS:
+        '     * name - name of the meter attribute
+        '     * decrement - the decrement value
+
+        '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_HOST_URL, LF_E_METER_ATTRIBUTE_NOT_FOUND,
+        '     LF_E_INET, LF_E_LICENSE_NOT_FOUND, LF_E_CLIENT, LF_E_IP, LF_E_SERVER,
+        '     LF_E_SERVER_LICENSE_NOT_ACTIVATED, LF_E_SERVER_TIME_MODIFIED, LF_E_SERVER_LICENSE_SUSPENDED,
+        '     LF_E_SERVER_LICENSE_GRACE_PERIOD_OVER, LF_E_SERVER_LICENSE_EXPIRED
+
+        '
+        Public Shared Function DecrementFloatingClientMeterAttributeUses(ByVal name As String, decrement As UInteger) As Integer
+#If LA_ANY_CPU Then
+            Return If(IntPtr.Size = 8, Native.DecrementFloatingClientMeterAttributeUses_x64(name, decrement), Native.DecrementFloatingClientMeterAttributeUses(name, decrement))
+#Else
+            Return Native.DecrementFloatingClientMeterAttributeUses(name, decrement)
+#End If
+        End Function
+
+        '
+        '     FUNCTION: ResetFloatingClientMeterAttributeUses()
+
+        '     PURPOSE: Resets the meter attribute uses consumed by the floating client.
+
+        '     PARAMETERS:
+        '     * name - name of the meter attribute
+
+        '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_HOST_URL, LF_E_METER_ATTRIBUTE_NOT_FOUND,
+        '     LF_E_INET, LF_E_LICENSE_NOT_FOUND, LF_E_CLIENT, LF_E_IP, LF_E_SERVER,
+        '     LF_E_SERVER_LICENSE_NOT_ACTIVATED, LF_E_SERVER_TIME_MODIFIED, LF_E_SERVER_LICENSE_SUSPENDED,
+        '     LF_E_SERVER_LICENSE_GRACE_PERIOD_OVER, LF_E_SERVER_LICENSE_EXPIRED
+
+        '
+        Public Shared Function ResetFloatingClientMeterAttributeUses(ByVal name As String) As Integer
+#If LA_ANY_CPU Then
+            Return If(IntPtr.Size = 8, Native.ResetFloatingClientMeterAttributeUses_x64(name), Native.ResetFloatingClientMeterAttributeUses(name))
+#Else
+            Return Native.ResetFloatingClientMeterAttributeUses(name)
+#End If
+        End Function
 
         Public Enum StatusCodes As UInteger
 
@@ -342,6 +447,20 @@ Namespace Cryptlex
             LF_E_FLOATING_CLIENT_METADATA_LIMIT = 54
 
             '
+            '    CODE: LF_E_METER_ATTRIBUTE_NOT_FOUND
+
+            '    MESSAGE: The meter attribute does not exist.
+            '
+            LF_E_METER_ATTRIBUTE_NOT_FOUND = 55
+
+            '
+            '    CODE: LF_E_METER_ATTRIBUTE_USES_LIMIT_REACHED
+
+            '    MESSAGE: The meter attribute has reached it's usage limit.
+            '
+            LF_E_METER_ATTRIBUTE_USES_LIMIT_REACHED = 56
+
+            '
             '    CODE: LF_E_IP
 
             '    MESSAGE: IP address is not allowed.
@@ -430,7 +549,15 @@ Namespace Cryptlex
             End Function
 
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function GetHostLicenseMeterAttribute(ByVal name As String, ByRef allowedUses As UInteger, ByRef totalUses As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function GetHostLicenseExpiryDate(ByRef expiryDate As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function GetFloatingClientMeterAttributeUses(ByVal name As String, ByRef uses As UInteger) As Integer
             End Function
 
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
@@ -443,6 +570,18 @@ Namespace Cryptlex
 
             <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function HasFloatingLicense() As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function IncrementFloatingClientMeterAttributeUses(ByVal name As String, increment As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function DecrementFloatingClientMeterAttributeUses(ByVal name As String, decrement As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME, CharSet:=CharSet.Unicode, CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function ResetFloatingClientMeterAttributeUses(ByVal name As String) As Integer
             End Function
 
 #If LF_ANY_CPU Then
@@ -467,8 +606,16 @@ Namespace Cryptlex
             Public Shared Function GetHostLicenseMetadata_x64(ByVal key As String, ByVal value As StringBuilder, ByVal length As Integer) As Integer
             End Function
 
+            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetHostLicenseMeterAttribute", CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function GetHostLicenseMeterAttribute_x64(ByVal name As String, ByRef allowedUses As UInteger, ByRef totalUses As UInteger) As Integer
+            End Function
+
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetHostLicenseExpiryDate", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function GetHostLicenseExpiryDate_x64(ByRef expiryDate As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="GetFloatingClientMeterAttributeUses", CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function GetFloatingClientMeterAttributeUses_x64(ByVal name As String, ByRef uses As UInteger) As Integer
             End Function
 
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="RequestFloatingLicense", CallingConvention:=CallingConvention.Cdecl)>
@@ -481,6 +628,18 @@ Namespace Cryptlex
 
             <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="HasFloatingLicense", CallingConvention:=CallingConvention.Cdecl)>
             Public Shared Function HasFloatingLicense_x64() As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="IncrementFloatingClientMeterAttributeUses", CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function IncrementFloatingClientMeterAttributeUses_x64(ByVal name As String, increment As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="DecrementFloatingClientMeterAttributeUses", CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function DecrementFloatingClientMeterAttributeUses_x64(ByVal name As String, decrement As UInteger) As Integer
+            End Function
+
+            <DllImport(DLL_FILE_NAME_X64, CharSet:=CharSet.Unicode, EntryPoint:="ResetFloatingClientMeterAttributeUses", CallingConvention:=CallingConvention.Cdecl)>
+            Public Shared Function ResetFloatingClientMeterAttributeUses_x64(ByVal name As String) As Integer
             End Function
 #End If
         End Class
