@@ -156,7 +156,7 @@ Namespace Cryptlex
         '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_METER_ATTRIBUTE_NOT_FOUND
         '
         Public Shared Function GetHostLicenseMeterAttribute(ByVal name As String, ByRef allowedUses As UInteger, ByRef totalUses As UInteger) As Integer
-#If LA_ANY_CPU Then
+#If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.GetHostLicenseMeterAttribute_x64(name, allowedUses, totalUses), Native.GetHostLicenseMeterAttribute(name, allowedUses, totalUses))
 #Else
             Return Native.GetHostLicenseMeterAttribute(name, allowedUses, totalUses)
@@ -193,7 +193,7 @@ Namespace Cryptlex
         '     RETURN CODES: LF_OK, LF_E_PRODUCT_ID, LF_E_NO_LICENSE, LF_E_METER_ATTRIBUTE_NOT_FOUND
         '
         Public Shared Function GetFloatingClientMeterAttributeUses(ByVal name As String, ByRef uses As UInteger) As Integer
-#If LA_ANY_CPU Then
+#If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.GetFloatingClientMeterAttributeUses_x64(name, uses), Native.GetFloatingClientMeterAttributeUses(name, uses))
 #Else
             Return Native.GetFloatingClientMeterAttributeUses(name, uses)
@@ -270,7 +270,7 @@ Namespace Cryptlex
 
         '
         Public Shared Function IncrementFloatingClientMeterAttributeUses(ByVal name As String, increment As UInteger) As Integer
-#If LA_ANY_CPU Then
+#If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.IncrementFloatingClientMeterAttributeUses_x64(name, increment), Native.IncrementFloatingClientMeterAttributeUses(name, increment))
 #Else
             Return Native.IncrementFloatingClientMeterAttributeUses(name, increment)
@@ -293,7 +293,7 @@ Namespace Cryptlex
 
         '
         Public Shared Function DecrementFloatingClientMeterAttributeUses(ByVal name As String, decrement As UInteger) As Integer
-#If LA_ANY_CPU Then
+#If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.DecrementFloatingClientMeterAttributeUses_x64(name, decrement), Native.DecrementFloatingClientMeterAttributeUses(name, decrement))
 #Else
             Return Native.DecrementFloatingClientMeterAttributeUses(name, decrement)
@@ -315,7 +315,7 @@ Namespace Cryptlex
 
         '
         Public Shared Function ResetFloatingClientMeterAttributeUses(ByVal name As String) As Integer
-#If LA_ANY_CPU Then
+#If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.ResetFloatingClientMeterAttributeUses_x64(name), Native.ResetFloatingClientMeterAttributeUses(name))
 #Else
             Return Native.ResetFloatingClientMeterAttributeUses(name)
