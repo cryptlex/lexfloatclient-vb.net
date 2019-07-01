@@ -90,7 +90,7 @@ Namespace Cryptlex
             If syncTarget IsNot Nothing Then
                 wrappedCallback = Function(v) syncTarget.Invoke(callback, New Object() {v})
             End If
-            callbackList.Add(wrappedCallback);
+            callbackList.Add(wrappedCallback)
 #If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.SetFloatingLicenseCallback_x64(wrappedCallback), Native.SetFloatingLicenseCallback(wrappedCallback))
 #Else
