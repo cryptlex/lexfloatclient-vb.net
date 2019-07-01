@@ -1,6 +1,7 @@
 
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports System.Collections.Generic
 
 Namespace Cryptlex
     Public NotInheritable Class LexFloatClient
