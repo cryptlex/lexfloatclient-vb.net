@@ -89,6 +89,7 @@ Namespace Cryptlex
             If syncTarget IsNot Nothing Then
                 wrappedCallback = Function(v) syncTarget.Invoke(callback, New Object() {v})
             End If
+            callbackList.Add(wrappedCallback);
 #If LF_ANY_CPU Then
             Return If(IntPtr.Size = 8, Native.SetFloatingLicenseCallback_x64(wrappedCallback), Native.SetFloatingLicenseCallback(wrappedCallback))
 #Else
@@ -402,7 +403,7 @@ Namespace Cryptlex
         Public Delegate Sub CallbackType(status As UInteger)
 
         ' To prevent garbage collection of delegate, need to keep a reference 
-        Shared leaseCallback As CallbackType
+        Shared callbackList As List(Of CallbackType)
 
         Private NotInheritable Class Native
             Private Sub New()
