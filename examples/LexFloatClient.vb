@@ -523,7 +523,7 @@ Namespace Cryptlex
         Public Delegate Sub CallbackType(status As UInteger)
 
         ' To prevent garbage collection of delegate, need to keep a reference 
-        Shared callbackList As List(Of CallbackType)
+        Shared ReadOnly callbackList As List(Of CallbackType) = New List(Of CallbackType)()
 
         Private NotInheritable Class Native
             Private Sub New()
